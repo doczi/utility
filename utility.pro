@@ -5,7 +5,8 @@ CONFIG += ordered
 SUBDIRS += \
     libraryloader \
     linalg \
-    logger
+    logger \
+    test
 
 OTHER_FILES += \
     compilerflags.pri \

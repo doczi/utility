@@ -5,3 +5,6 @@ CONFIG -= qt
 
 SOURCES += main.cpp
 
+INCLUDEPATH += $$PWD/..
+
+include($$PWD/../compilerflags.pri)

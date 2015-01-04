@@ -88,7 +88,7 @@ const char* PrintfParser::ProcessIndex(const char* format)
             number = 10 * number + (*i - '0');
             break;
         case '$':
-            index = number;
+            index = number - 1;
             return i + 1;
         default:
             return format;
