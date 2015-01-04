@@ -1,6 +1,7 @@
 TEMPLATE = lib
 
 HEADERS += \
-    formatter.h \
-    logger.h
+    logger.h \
+    printfparser.h \
+    printfstream.h
 
