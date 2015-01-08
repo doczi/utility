@@ -16,12 +16,16 @@ public:
     const char* ParseFormat(const char* format);
     std::ios_base::fmtflags FormatFlags() const { return formatFlags; }
     void SetFormatFlags(std::ios_base::fmtflags value) { formatFlags = value; }
-    int Index() const { return index; }
-    void SetIndex(int value) { index = value; }
+    int ValueIndex() const { return valueIndex; }
+    void SetValueIndex(int value) { valueIndex = value; }
     int Width() const { return width; }
     void SetWidth(int value) { width = value; }
+    int WidthIndex() const { return widthIndex; }
+    void SetWidthIndex(int value) { widthIndex = value; }
     int Precision() const { return precision; }
     void SetPrecision(int value) { precision = value; }
+    int PrecisionIndex() const { return precisionIndex; }
+    void SetPrecisionIndex(int value) { precisionIndex = value; }
     int Length() const { return length; }
     void SetLength(int value) { precision = value; }
     char Fill() const { return fill; }
@@ -30,15 +34,16 @@ public:
     void SetSpecifier(char value) { specifier = value; }
 private:
     std::ios_base::fmtflags formatFlags;
-    int index;
+    int valueIndex;
     int width;
+    int widthIndex;
     int precision;
+    int precisionIndex;
     int length;
     char fill;
     char specifier;
 
     const char* ProcessPercent(const char* format);
-    const char* ProcessIndex(const char* format);
     const char* ProcessAlignment(const char* format);
     const char* ProcessWidth(const char* format);
     const char* ProcessPrecision(const char* format);
@@ -51,7 +56,6 @@ private:
 const char* PrintfParser::ParseFormat(const char* format)
 {
     format = ProcessPercent(format);
-    format = ProcessIndex(format);
     format = ProcessAlignment(format);
     format = ProcessWidth(format);
     format = ProcessPrecision(format);
@@ -64,14 +68,7 @@ const char* PrintfParser::ParseFormat(const char* format)
 
 const char* PrintfParser::ProcessPercent(const char* format)
 {
-    return (*format == '%') ? (format + 1) : format;
-}
-
-
-
-const char* PrintfParser::ProcessIndex(const char* format)
-{
-    index = UNSPECIFIED;
+    valueIndex = UNSPECIFIED;
     int number = 0;
     for (const char* i = format;; ++i) {
         switch (*i) {
@@ -88,8 +85,14 @@ const char* PrintfParser::ProcessIndex(const char* format)
             number = 10 * number + (*i - '0');
             break;
         case '$':
-            index = number - 1;
+            valueIndex = number - 1;
             return i + 1;
+        case '%':
+            if (i == format) {
+                break;
+            } else {
+                return i;
+            }
         default:
             return format;
         }
@@ -157,6 +160,10 @@ const char* PrintfParser::ProcessWidth(const char* format)
         case '*':
             width = WILDCARD;
             break;
+        case '$':
+            widthIndex = width - 1;
+            width = WILDCARD;
+            break;
         default:
             return i;
         }
@@ -188,6 +195,10 @@ const char* PrintfParser::ProcessPrecision(const char* format)
             precision = 10 * precision + (*i - '0');
             break;
         case '*':
+            precision = WILDCARD;
+            break;
+        case '$':
+            precisionIndex = precision - 1;
             precision = WILDCARD;
             break;
         case '.':

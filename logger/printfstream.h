@@ -139,20 +139,24 @@ int StreamPrintf(std::ostream& stream, const char* format, Args... args)
             format += 2;
         } else {
             format = print.parser.ParseFormat(format);
-            if (print.parser.Index() == PrintfParser::UNSPECIFIED) {
-                print.parser.SetIndex(arg);
+            if (print.parser.ValueIndex() == PrintfParser::UNSPECIFIED) {
+                print.parser.SetValueIndex(arg++);
             }
-            int offset = 0;
             if (print.parser.Width() == PrintfParser::WILDCARD) {
-                print.parser.SetWidth(ProcessNth(GetInt(),
-                        print.parser.Index() + offset++, args...));
+                if (print.parser.WidthIndex() == PrintfParser::UNSPECIFIED) {
+                    print.parser.SetWidth(ProcessNth(GetInt(), arg++, args...));
+                } else {
+                    print.parser.SetWidth(ProcessNth(GetInt(), print.parser.WidthIndex(), args...));
+                }
             }
             if (print.parser.Precision() == PrintfParser::WILDCARD) {
-                print.parser.SetWidth(ProcessNth(GetInt(),
-                        print.parser.Index() + offset++, args...));
+                if (print.parser.PrecisionIndex() == PrintfParser::UNSPECIFIED) {
+                    print.parser.SetPrecision(ProcessNth(GetInt(), arg++, args...));
+                } else {
+                    print.parser.SetPrecision(ProcessNth(GetInt(), print.parser.PrecisionIndex(), args...));
+                }
             }
-            ProcessNth(print, print.parser.Index() + offset++, args...);
-            arg += offset;
+            ProcessNth(print, print.parser.ValueIndex(), args...);
         }
     }
     stream.write(format, i);
