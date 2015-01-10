@@ -307,7 +307,7 @@ const char* PrintfParser::ProcessSpecifier(const char* format)
     case '%':
         break;
     default:
-        return format;
+        return format + 1;
     }
     return format + 1;
 }

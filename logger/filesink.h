@@ -11,7 +11,7 @@ class FileSink: public LogSink
 {
 public:
     FileSink(const std::string& path):
-        file(path, std::fstream::out | std::fstream::app)
+        logFile(path, std::fstream::out | std::fstream::app)
     {}
 
     void Log(
@@ -20,10 +20,10 @@ public:
             int line,
             const std::string& message) override
     {
-        file << FormatHeader(level, file, line) << message << std::endl;
+        logFile << FormatHeader(level, file, line) << message << std::endl;
     }
 private:
-    std::fstream file;
+    std::fstream logFile;
 };
 
 

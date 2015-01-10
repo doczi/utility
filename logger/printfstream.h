@@ -146,14 +146,18 @@ int StreamPrintf(std::ostream& stream, const char* format, Args... args)
                 if (print.parser.WidthIndex() == PrintfParser::UNSPECIFIED) {
                     print.parser.SetWidth(ProcessNth(GetInt(), arg++, args...));
                 } else {
-                    print.parser.SetWidth(ProcessNth(GetInt(), print.parser.WidthIndex(), args...));
+                    print.parser.SetWidth(ProcessNth(GetInt(),
+                            print.parser.WidthIndex(), args...));
                 }
             }
             if (print.parser.Precision() == PrintfParser::WILDCARD) {
-                if (print.parser.PrecisionIndex() == PrintfParser::UNSPECIFIED) {
-                    print.parser.SetPrecision(ProcessNth(GetInt(), arg++, args...));
+                if (print.parser.PrecisionIndex() == PrintfParser::UNSPECIFIED)
+                {
+                    print.parser.SetPrecision(ProcessNth(GetInt(), arg++,
+                            args...));
                 } else {
-                    print.parser.SetPrecision(ProcessNth(GetInt(), print.parser.PrecisionIndex(), args...));
+                    print.parser.SetPrecision(ProcessNth(GetInt(),
+                            print.parser.PrecisionIndex(), args...));
                 }
             }
             ProcessNth(print, print.parser.ValueIndex(), args...);

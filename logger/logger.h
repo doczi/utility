@@ -4,6 +4,7 @@
 #include "printfstream.h"
 
 #include <ctime>
+#include <mutex>
 #include <sstream>
 #include <string>
 
@@ -34,9 +35,13 @@ public:
         strftime(timeBuffer, sizeof(timeBuffer), "%F %T", localtime(&rawtime));
 
         std::ostringstream header;
-        StreamPrintf(header, "%s [%c] %s:%05d    ", timeBuffer, "VDIWE"[level],
+        StreamPrintf(header, "%s [%c] %s:%05d", timeBuffer, "VDIWE"[level],
                 file, line);
-        return header.str();
+
+        std::string result = header.str();
+        result.resize(60, ' ');
+        result[result.size() - 1] = ' ';
+        return result;
     }
 
     LogSink():
@@ -73,10 +78,12 @@ public:
     }
 
     void AddSink(LogSink& sink) {
+        std::lock_guard<std::mutex> lock(mutex);
         sinks.push_back(&sink);
     }
 
     void RemoveSink(const LogSink& sink) {
+        std::lock_guard<std::mutex> lock(mutex);
         sinks.erase(std::find(sinks.begin(), sinks.end(), &sink));
     }
 
@@ -90,6 +97,7 @@ public:
     {
         std::ostringstream message;
         bool isMessageFormatted = false;
+        std::lock_guard<std::mutex> lock(mutex);
         for (LogSink* sink: sinks) {
             if (level >= sink->Level()) {
                 if (!isMessageFormatted) {
@@ -101,6 +109,7 @@ public:
         }
     }
 private:
+    std::mutex mutex;
     std::vector<LogSink*> sinks;
 };
 
