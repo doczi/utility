@@ -91,10 +91,10 @@ const char* PrintfParser::ProcessPercent(const char* format)
             if (i == format) {
                 break;
             } else {
-                return i;
+                return (valueIndex != UNSPECIFIED) ? i : (format + 1);
             }
         default:
-            return format;
+            return (valueIndex != UNSPECIFIED) ? i : (format + 1);
         }
     }
     assert(false); // unreachable

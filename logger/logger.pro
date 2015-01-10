@@ -3,5 +3,8 @@ TEMPLATE = lib
 HEADERS += \
     logger.h \
     printfparser.h \
-    printfstream.h
+    printfstream.h \
+    filesink.h \
+    consolesink.h \
+    androidlogsink.h
 

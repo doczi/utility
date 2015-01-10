@@ -31,7 +31,7 @@ struct Print
     int count;
 
     void operator()(char argument) {
-        if ((parser.Specifier() == 'c') && (parser.Specifier() == 's')) {
+        if ((parser.Specifier() == 'c') || (parser.Specifier() == 's')) {
             PrintArgument(argument);
         } else {
             PrintArgument(static_cast<int>(argument));
@@ -39,7 +39,7 @@ struct Print
     }
 
     void operator()(wchar_t argument) {
-        if ((parser.Specifier() == 'c') && (parser.Specifier() == 's')) {
+        if ((parser.Specifier() == 'c') || (parser.Specifier() == 's')) {
             PrintArgument(argument);
         } else {
             PrintArgument(static_cast<int>(argument));
