@@ -53,7 +53,7 @@ private:
 
 
 
-const char* PrintfParser::ParseFormat(const char* format)
+inline const char* PrintfParser::ParseFormat(const char* format)
 {
     format = ProcessPercent(format);
     format = ProcessAlignment(format);
@@ -66,7 +66,7 @@ const char* PrintfParser::ParseFormat(const char* format)
 
 
 
-const char* PrintfParser::ProcessPercent(const char* format)
+inline const char* PrintfParser::ProcessPercent(const char* format)
 {
     valueIndex = UNSPECIFIED;
     int number = 0;
@@ -103,7 +103,7 @@ const char* PrintfParser::ProcessPercent(const char* format)
 
 
 
-const char* PrintfParser::ProcessAlignment(const char* format)
+inline const char* PrintfParser::ProcessAlignment(const char* format)
 {
     fill = ' ';
     formatFlags &= ~(std::ios_base::adjustfield | std::ios_base::showpos |
@@ -137,7 +137,7 @@ const char* PrintfParser::ProcessAlignment(const char* format)
 
 
 
-const char* PrintfParser::ProcessWidth(const char* format)
+inline const char* PrintfParser::ProcessWidth(const char* format)
 {
     width = UNSPECIFIED;
     for (const char* i = format;; ++i) {
@@ -174,7 +174,7 @@ const char* PrintfParser::ProcessWidth(const char* format)
 
 
 
-const char* PrintfParser::ProcessPrecision(const char* format)
+inline const char* PrintfParser::ProcessPrecision(const char* format)
 {
     precision = UNSPECIFIED;
     for (const char* i = format;; ++i) {
@@ -213,7 +213,7 @@ const char* PrintfParser::ProcessPrecision(const char* format)
 
 
 
-const char* PrintfParser::ProcessLength(const char* format)
+inline const char* PrintfParser::ProcessLength(const char* format)
 {
     length = UNSPECIFIED;
     for (const char* i = format;; ++i) {
@@ -246,7 +246,7 @@ const char* PrintfParser::ProcessLength(const char* format)
 
 
 
-const char* PrintfParser::ProcessSpecifier(const char* format)
+inline const char* PrintfParser::ProcessSpecifier(const char* format)
 {
     specifier = *format;
     formatFlags &= ~(std::ios_base::basefield | std::ios_base::floatfield |

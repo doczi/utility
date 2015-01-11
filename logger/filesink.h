@@ -20,7 +20,8 @@ public:
             int line,
             const std::string& message) override
     {
-        logFile << FormatHeader(level, file, line) << message << std::endl;
+        logFile << Logger::FormatHeader(level, file, line) << message <<
+                std::endl;
     }
 private:
     std::fstream logFile;

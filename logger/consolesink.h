@@ -31,10 +31,11 @@ public:
                 "\x1b[33m",
                 "\033[31m"
             };
-            std::clog << COLORS[level] << FormatHeader(level, file, line) <<
-                    message << "\x1b[0m" << std::endl;
+            std::clog << COLORS[level] <<
+                    Logger::FormatHeader(level, file, line) << message <<
+                    "\x1b[0m" << std::endl;
         } else {
-            std::clog << FormatHeader(level, file, line) << message <<
+            std::clog << Logger::FormatHeader(level, file, line) << message <<
                     std::endl;
         }
     }
